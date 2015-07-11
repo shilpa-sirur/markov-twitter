@@ -1,6 +1,12 @@
 import sys
+import os
 from random import choice
-
+import twitter
+api = twitter.Api(
+    consumer_key=os.environ['TWITTER_CONSUMER_KEY'],
+    consumer_secret=os.environ['TWITTER_CONSUMER_SECRET'],
+    access_token_key=os.environ['TWITTER_ACCESS_TOKEN_KEY'],
+    access_token_secret=os.environ['TWITTER_ACCESS_TOKEN_SECRET'])
 
 class SimpleMarkovGenerator(object):
 
@@ -10,9 +16,9 @@ class SimpleMarkovGenerator(object):
 
         # list_filenames = open(filenames)
         all_word_list = []
-        for f in filenames:
+        for files in filenames:
         # Read each line from the log file and process it
-            filename = open(f)
+            filename = open(files)
             for line in filename:
                 # Each line should be in the format:
                 seperate_words = line.rstrip().split(" ") 
@@ -45,7 +51,7 @@ class SimpleMarkovGenerator(object):
             new_value1 = choice(bigram_dict[new_key1])
             new_key1 = (new_key1[1], new_value1)
             random_text = random_text + " " + new_value1
-        return random_text[:550]
+        return random_text[:140]
 
        
 
@@ -65,6 +71,7 @@ if __name__ == "__main__":
 
     # we should call the make_text method 5x
    
-    print  w.make_text(z)
-
+    # print  w.make_text(z)
+    status = api.PostUpdate(w.make_text(z))
+    print status.text
     pass
